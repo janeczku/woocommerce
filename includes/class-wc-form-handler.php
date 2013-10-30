@@ -660,6 +660,8 @@ class WC_Form_Handler {
 						$redirect = esc_url( $_POST['redirect'] );
 					} elseif ( wp_get_referer() ) {
 						$redirect = esc_url( wp_get_referer() );
+					} elseif ( ! empty( $_POST['_wp_http_referer'] ) ) {
+						$redirect = esc_url( urldecode($_POST['redirect']) );
 					} else {
 						$redirect = esc_url( get_permalink( woocommerce_get_page_id( 'myaccount' ) ) );
 					}
