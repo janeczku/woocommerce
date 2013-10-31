@@ -38,6 +38,33 @@ function woocommerce_template_redirect() {
 		wp_redirect( str_replace( '&amp;', '&', wp_logout_url( get_permalink( woocommerce_get_page_id( 'myaccount' ) ) ) ) );
 		exit;
 	}
+	
+	// Generate Gateway Token And Redirect
+	elseif ( is_page( woocommerce_get_page_id( 'myaccount' ) ) && isset( $wp->query_vars['streamurl'] ) && is_user_logged_in() ) {
+		$user_id = get_current_user_id();
+		if ( WC_Subscriptions_Manager::user_has_subscription( $user_id ) {
+			wp_redirect( str_replace( '&amp;', '&', $wp->query_vars['streamurl'] ) );
+			exit;
+		}
+	}
+
+	// Generate Gateway Token And Redirect Alternative
+	elseif ( is_page( woocommerce_get_page_id( 'myaccount2' ) ) && isset( $wp->query_vars['streamurl'] ) && is_user_logged_in() ) {
+		//$current_user = get_user_by( 'id', get_current_user_id());
+		$current_user = wp_get_current_user();
+		if( isset( $current_user->roles ) && is_array( $current_user->roles ) ) {
+			if( in_array( "subscriber", $user->roles ) ) {
+				//$ip = $_SERVER['REMOTE_ADDR'];
+				//$ips = explode(",", $ip);
+				//$ip = $ips[0];
+				//$tokenurl = gwt_token_request( $ip );
+				//redirect = $tokenurl . '?redirect=' . urlencode($wp->query_vars['streamurl']);
+				wp_redirect( str_replace( '&amp;', '&', $_GET['streamurl'] ) );
+				//wp_redirect( urldecode($_GET['streamurl'] ) );
+				exit;
+			}
+		}
+	}
 
 	// Redirect to the product page if we have a single product
 	elseif ( is_search() && is_post_type_archive( 'product' ) && apply_filters( 'woocommerce_redirect_single_search_result', true ) && $wp_query->post_count == 1 ) {
