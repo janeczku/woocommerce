@@ -43,9 +43,12 @@ function woocommerce_template_redirect() {
 	elseif ( is_page( woocommerce_get_page_id( 'myaccount' ) ) && isset( $wp->query_vars['streamurl'] ) && is_user_logged_in() ) {
 		$user_id = get_current_user_id();
 		if ( WC_Subscriptions_Manager::user_has_subscription( $user_id ) {
-			wp_redirect( str_replace( '&amp;', '&', $wp->query_vars['streamurl'] ) );
+			$ip = $_SERVER['REMOTE_ADDR'];
+			$tokenurl = gwt_token_url($ip,$wp->query_vars['streamurl']);
+			wp_redirect( $tokenurl );
 			exit;
 		}
+
 	}
 
 	// Generate Gateway Token And Redirect Alternative
